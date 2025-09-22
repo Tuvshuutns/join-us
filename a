@@ -1,0 +1,211 @@
+"use client";
+import "./index.css";
+import { useState } from "react";
+
+export default function Home() {
+  const [step, setStep] = useState(1);
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+  });
+
+  const validateName = (name) => /^[A-Za-z]+$/.test(name);
+
+  const handleFirstNameChange = (e) => {
+    const value = e.target.value;
+    setFirstName(value);
+    setErrors((prev) => ({
+      ...prev,
+      firstName: validateName(value)
+        ? ""
+        : "First name cannot contain special characters or numbers.",
+    }));
+  };
+
+  const handleLastNameChange = (e) => {
+    const value = e.target.value;
+    setLastName(value);
+    setErrors((prev) => ({
+      ...prev,
+      lastName: validateName(value)
+        ? ""
+        : "Last name cannot contain special characters or numbers.",
+    }));
+  };
+
+  const handleUsernameChange = (e) => {
+    const value = e.target.value;
+    setUsername(value);
+    setErrors((prev) => ({
+      ...prev,
+      username: validateName(value)
+        ? ""
+        : "This username is already taken. Please choose another one.",
+    }));
+  };
+
+  return (
+    <div className="container">
+      <div className="card">
+        <div className="header">
+          <img className="logo" src="pine.svg" alt="Join Us" />
+          <h1>Join Us! 😎</h1>
+          <p>Please provide all current information accurately.</p>
+        </div>
+
+        <div className="form">
+          {step === 1 && (
+            <>
+              <p>
+                First name <span className="required">*</span>
+              </p>
+              <input
+                type="text"
+                placeholder="Your First Name"
+                value={firstName}
+                onChange={handleFirstNameChange}
+                className={errors.firstName ? "error-input" : "form-input"}
+              />
+              {errors.firstName && (
+                <h2 className="error-text">{errors.firstName}</h2>
+              )}
+
+              <p>
+                Last name <span className="required">*</span>
+              </p>
+              <input
+                type="text"
+                placeholder="Your Last Name"
+                value={lastName}
+                onChange={handleLastNameChange}
+                className={errors.lastName ? "error-input" : "form-input"}
+              />
+              {errors.lastName && (
+                <h2 className="error-text">{errors.lastName}</h2>
+              )}
+
+              <p>
+                Username <span className="required">*</span>
+              </p>
+              <input
+                type="text"
+                placeholder="Your Username"
+                value={username}
+                onChange={handleUsernameChange}
+                className={errors.username ? "error-input" : "form-input"}
+              />
+              {errors.username && (
+                <h2 className="error-text">{errors.username}</h2>
+              )}
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <p>
+                Email <span className="required">*</span>
+              </p>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your Email"
+                className={errors.email ? "error-input" : "form-input"}
+              />
+
+              <p>
+                Phone number <span className="required">*</span>
+              </p>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Your Phone Number"
+                className={errors.phoneNumber ? "error-input" : "form-input"}
+              />
+
+              <p>
+                Password <span className="required">*</span>
+              </p>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Your Password"
+                className={errors.password ? "error-input" : "form-input"}
+              />
+
+              <p>
+                Confirm Password <span className="required">*</span>
+              </p>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm Password"
+                className={
+                  errors.confirmPassword ? "error-input" : "form-input"
+                }
+              />
+            </>
+          )}
+          {step === 3 && (
+            <>
+              <p>
+                Date of birth <span className="required">*</span>
+              </p>
+              <input
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className={errors.dateOfBirth ? "error-input" : "form-input"}
+              />
+              <p>
+                Profile image <span className="required">*</span>
+              </p>
+              <input
+                className="file-input"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setProfileImage(e.target.files[0])}
+              />
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="buttons">
+        {step > 1 && (
+          <button className="Back" onClick={prevStep}>
+            Back
+          </button>
+        )}
+        {step < 3 && (
+          <button className="Continue" onClick={nextStep}>
+            Continue {step}/3 <img src="Vector.png" alt="Arrow" />
+          </button>
+        )}
+        {step === 3 && (
+          <button className="Continue" onClick={() => alert("Form submitted!")}>
+            Submit 3/3 <img src="Vector.png" alt="Arrow" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
